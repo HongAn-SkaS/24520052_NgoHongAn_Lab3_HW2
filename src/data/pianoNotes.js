@@ -38,13 +38,16 @@ export function generatePianoNotes() {
     const pitchClass = midi % 12;
     const isBlack = BLACK_KEY_PITCH_CLASSES.has(pitchClass);
 
+    
     notes.push({
       midi,
       noteName: getNoteName(midi),
       frequency: getFrequency(midi),
       isBlack,
       whiteKeyIndex: isBlack ? null : whiteKeyIndex,
+      leftWhiteKeyIndex: isBlack ? whiteKeyIndex : null,
     });
+
 
     if (!isBlack) {
       whiteKeyIndex += 1;
