@@ -81,7 +81,8 @@ export function createAudioEngine() {
     return voice;
   }
 
-  function stopNote(voice) {
+  
+  function stopNote(voice, { immediate = false } = {}) {
     if (!voice || voice.stopped || !activeVoices.has(voice)) {
       return;
     }
@@ -92,10 +93,18 @@ export function createAudioEngine() {
     const now = context.currentTime;
 
     voice.gainNode.gain.cancelScheduledValues(now);
+
+    if (immediate) {
+      voice.gainNode.gain.setValueAtTime(0, now);
+      voice.oscillator.stop(now);
+      return;
+    }
+
     voice.gainNode.gain.setValueAtTime(
       voice.gainNode.gain.value,
       now,
     );
+
     voice.gainNode.gain.linearRampToValueAtTime(
       0,
       now + RELEASE_DURATION,
@@ -103,6 +112,7 @@ export function createAudioEngine() {
 
     voice.oscillator.stop(now + RELEASE_DURATION);
   }
+
 
   function dispose() {
     if (disposed) {
