@@ -1,7 +1,9 @@
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { PIANO_NOTES } from "../../data/pianoNotes.js";
+import { createAudioEngine } from "../../audio/audioEngine.js";
+import { AudioTaskQueue } from "../../audio/AudioTaskQueue.js";
 import { PianoKey } from "../PianoKey/PianoKey.jsx";
 
 import "./PianoBoard.css";
@@ -12,7 +14,24 @@ const BLACK_KEYS = PIANO_NOTES.filter((note) => note.isBlack);
 export function PianoBoard() {
   const [pressedNotes, setPressedNotes] = useState(() => new Set());
 
+  const audioQueueRef = useRef(null);
+
+  useEffect(() => {
+    const audioEngine = createAudioEngine();
+    const audioQueue = new AudioTaskQueue(audioEngine, 8);
+
+    audioQueueRef.current = audioQueue;
+
+    return () => {
+      audioQueue.dispose();
+      audioEngine.dispose();
+      audioQueueRef.current = null;
+    };
+  }, []);
+
   const handleNoteOn = useCallback((midi) => {
+    audioQueueRef.current?.noteOn(midi);
+
     setPressedNotes((previousNotes) => {
       if (previousNotes.has(midi)) {
         return previousNotes;
@@ -26,6 +45,8 @@ export function PianoBoard() {
   }, []);
 
   const handleNoteOff = useCallback((midi) => {
+    audioQueueRef.current?.noteOff(midi);
+
     setPressedNotes((previousNotes) => {
       if (!previousNotes.has(midi)) {
         return previousNotes;
