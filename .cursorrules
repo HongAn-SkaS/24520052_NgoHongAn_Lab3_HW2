@@ -1,0 +1,50 @@
+# UIT S3T - LAB 3 AI GOVERNANCE RULES
+
+## 1. STACK
+- React 19 + Vite + ES2024.
+- Use functional components and React Hooks.
+
+## 2. NO LEGACY APIS
+- Ban class extends React.Component.
+- Ban ReactDOM.render.
+- Ban defaultProps.
+- Ban keyCode.
+- Ban window.alert.
+
+## 3. ZERO DIV-SOUP
+- Prefer semantic HTML elements.
+- Use main, section, article, header, dl, dt, dd, figure, and output where appropriate.
+- Avoid unnecessary div wrappers.
+
+## 4. ACCESSIBILITY
+- Every input and select must have an associated label.
+- Use React 19 useId() for generated label associations.
+- Use semantic buttons and accessible interaction states.
+
+## 5. STATE HYGIENE
+- Immutable state updates only.
+- Never synchronize derived filtering or sorting state inside useEffect.
+- Keep state minimal and derive computed values during rendering.
+
+## 6. EFFECT CLEANUP
+- Every timer, event listener, and fetch inside useEffect must have cleanup.
+- Use AbortController for cancellable asynchronous requests.
+
+## 7. PERFORMANCE
+- Use React.memo for PianoKey.
+- Use shallowEqual comparison where appropriate.
+- Keep callbacks stable with useCallback.
+- Prevent unrelated piano keys from re-rendering.
+
+## 8. AUDIO RESOURCE MANAGEMENT
+- Manage AudioContext and OscillatorNode lifecycles correctly.
+- Maximum 8 concurrent voices.
+- Implement FIFO voice stealing.
+- Release all active audio resources during cleanup.
+
+## 9. CODE QUALITY
+- Use ES modules.
+- Prefer const over let.
+- Use descriptive names.
+- Keep components and utilities focused.
+- No unnecessary dependencies.
